@@ -40,3 +40,14 @@
 .read-the-docs {
   color: #888;
 }
+
+.keyboard {
+  margin-left: 5px;
+  margin-top: 10px;
+  width: 200px;
+  height: 250px;
+}
+
+.buttons {
+  margin: 5px;
+}
