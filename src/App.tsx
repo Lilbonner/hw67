@@ -74,12 +74,12 @@ const DisplayKeyboard = () => {
   };
 
   const handleEnter = () => {
-    if (pin === correctPin) {
+    if (pin.toString() === correctPin) {
       setAccessGranted(true);
       setShowAccessMessage(true);
     } else {
       setAccessGranted(false);
-      setShowAccessMessage(false);
+      setShowAccessMessage(true);
     }
   };
 
@@ -92,7 +92,7 @@ const DisplayKeyboard = () => {
       <div>
         {accessGranted ? (
             <AccessMessage message="Access Granted" color="green" />
-        ) : pin.length === 4 && showAccessMessage ? (
+        ) : showAccessMessage ? (
             <AccessMessage message="Access Denied" color="red" />
         ) : null}
         <div>
@@ -106,6 +106,7 @@ const DisplayKeyboard = () => {
       </div>
   );
 };
+
 
 const App = () => {
   return (
