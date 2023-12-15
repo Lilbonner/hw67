@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import './App.css'
 import {createStore} from "@reduxjs/toolkit";
+import {Provider, useDispatch, useSelector} from "react-redux";
 
 interface AccessMessageProps {
   message: string;
@@ -60,15 +61,58 @@ const Keyboard: React.FC<KeyboardProps> = ({ onButtonClick, onClear, onEnter }) 
       </div>
   );
 };
+const DisplayKeyboard = () => {
+  const dispatch = useDispatch();
+  const pin = useSelector((state: string) => state);
 
+  const correctPin = '1357';
+  const [accessGranted, setAccessGranted] = useState(false);
+  const [showAccessMessage, setShowAccessMessage] = useState(false);
 
-function App() {
+  const handleButtonClick = (digit: string) => {
+    dispatch(setPin(digit));
+  };
+
+  const handleEnter = () => {
+    if (pin === correctPin) {
+      setAccessGranted(true);
+      setShowAccessMessage(true);
+    } else {
+      setAccessGranted(false);
+      setShowAccessMessage(false);
+    }
+  };
+
+  const handleClear = () => {
+    dispatch(clearPin());
+    setShowAccessMessage(false);
+  };
 
   return (
-    <>
+      <div>
+        {accessGranted ? (
+            <AccessMessage message="Access Granted" color="green" />
+        ) : pin.length === 4 && showAccessMessage ? (
+            <AccessMessage message="Access Denied" color="red" />
+        ) : null}
+        <div>
+          <div>Password: {pin.replace(/./g, '*')}</div>
+          <Keyboard
+              onButtonClick={handleButtonClick}
+              onClear={handleClear}
+              onEnter={handleEnter}
+          />
+        </div>
+      </div>
+  );
+};
 
-    </>
-  )
-}
+const App = () => {
+  return (
+      <Provider store={store}>
+        <DisplayKeyboard />
+      </Provider>
+  );
+};
 
 export default App
